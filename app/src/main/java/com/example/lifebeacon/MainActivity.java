@@ -94,10 +94,6 @@ public class MainActivity extends AppCompatActivity {
         String finalSOS = SOS + " https://maps.google.com/?q=" + latitude + "," + longitude;
         String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
-
-        long expireAtMillis = System.currentTimeMillis() + (1 * 60 * 1000); // 1 minute in milliseconds
-        Date expireAt = new Date(expireAtMillis);
-
         db.collection("Trusted Contact").get().addOnSuccessListener(queryDocumentSnapshots -> {
             if (!queryDocumentSnapshots.isEmpty()) {
                 for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
@@ -110,7 +106,6 @@ public class MainActivity extends AppCompatActivity {
                         sosMessage.put("latitude", latitude);
                         sosMessage.put("longitude", longitude);
                         sosMessage.put("TimeStamp", timestamp);
-                        sosMessage.put("expireAt", expireAt);
 
 
                         db.collection("sosMessages").add(sosMessage)
