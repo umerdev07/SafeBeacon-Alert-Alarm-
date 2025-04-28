@@ -18,7 +18,7 @@
         android:background="@color/black">
 
         <TextView
-            android:id="@+id/del_contact_Name"
+            android:id="@+id/view_contact_Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Name"
@@ -36,7 +36,7 @@
 
             <!-- Phone Number -->
             <TextView
-                android:id="@+id/del_contact_phone_number"
+                android:id="@+id/view_contact_phone_number"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="Phone Number"
