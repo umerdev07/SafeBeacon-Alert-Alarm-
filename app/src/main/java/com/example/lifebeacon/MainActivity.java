@@ -16,16 +16,20 @@ import com.example.lifebeacon.Activities.MenuActivity;
 import com.example.lifebeacon.databinding.ActivityMainBinding;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
     private FusedLocationProviderClient fusedLocationProviderClient;
-    private Double latitude = null, longitude = null;
+    private Double latitude, longitude;
     private FirebaseFirestore db;
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 100;
@@ -87,9 +91,45 @@ public class MainActivity extends AppCompatActivity {
             SOS = "Please Help! I am in trouble.";
         }
 
-        String finalSOS = SOS;
+        String finalSOS = SOS + " https://maps.google.com/?q=" + latitude + "," + longitude;
+        String timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(new Date());
 
 
+        long expireAtMillis = System.currentTimeMillis() + (1 * 60 * 1000); // 1 minute in milliseconds
+        Date expireAt = new Date(expireAtMillis);
+
+        db.collection("Trusted Contact").get().addOnSuccessListener(queryDocumentSnapshots -> {
+            if (!queryDocumentSnapshots.isEmpty()) {
+                for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+                    String phNumber = document.getString("phonenumber");
+
+                    if (phNumber != null && !phNumber.isEmpty()) {
+                        Map<String, Object> sosMessage = new HashMap<>();
+                        sosMessage.put("contact", phNumber);
+                        sosMessage.put("SOS Message", finalSOS);
+                        sosMessage.put("latitude", latitude);
+                        sosMessage.put("longitude", longitude);
+                        sosMessage.put("TimeStamp", timestamp);
+                        sosMessage.put("expireAt", expireAt);
+
+
+                        db.collection("sosMessages").add(sosMessage)
+                                .addOnSuccessListener(documentReference -> {
+                                    Toast.makeText(this, "SOS Sent!", Toast.LENGTH_SHORT).show();
+                                })
+                                .addOnFailureListener(e -> {
+                                    Toast.makeText(this, "Check your Internet! " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                                });
+                    }else{
+                        Toast.makeText(this, "Phone number is not fetch", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            } else {
+                Toast.makeText(this, "No Trusted Contact", Toast.LENGTH_SHORT).show();
+            }
+        }).addOnFailureListener(e -> {
+            Toast.makeText(this, "Failed to fetch Contact! Check your Internet", Toast.LENGTH_SHORT).show();
+        });
     }
 
     @Override

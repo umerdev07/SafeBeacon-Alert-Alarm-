@@ -33,26 +33,35 @@ public class AddContactActivity extends AppCompatActivity {
                 String addName = binding.contactNameEditText.getText().toString();
                 String addPhoneNumber = binding.contactNumberEditText.getText().toString();
 
-                if(!addName.isEmpty() && !addPhoneNumber.isEmpty()){
-
+                if (!addName.isEmpty() && !addPhoneNumber.isEmpty()) {
                     Map<String, Object> contact = new HashMap<>();
                     contact.put("name", addName);
                     contact.put("phonenumber", addPhoneNumber);
 
+                    db.collection("Trusted Contact")
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+                                int count = queryDocumentSnapshots.size() + 1;
+                                String docName = "Contact " + count;
 
-                    db.collection("Trusted Contact").add(contact).addOnSuccessListener(documentReference -> {
-                                binding.contactNumberEditText.setText("");
-                                binding.contactNameEditText.setText("");
-                                Toast.makeText(AddContactActivity.this, "Contact Saved", Toast.LENGTH_SHORT).show();
-
-                    })
+                                db.collection("Trusted Contact")
+                                        .document(docName)
+                                        .set(contact)
+                                        .addOnSuccessListener(aVoid -> {
+                                            binding.contactNumberEditText.setText("");
+                                            binding.contactNameEditText.setText("");
+                                            Toast.makeText(AddContactActivity.this, "Contact Saved", Toast.LENGTH_SHORT).show();
+                                        })
+                                        .addOnFailureListener(e -> {
+                                            Toast.makeText(AddContactActivity.this, "Failed to save contact", Toast.LENGTH_SHORT).show();
+                                        });
+                            })
                             .addOnFailureListener(e -> {
-                                Toast.makeText(AddContactActivity.this, "Failed to save contact", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddContactActivity.this, "Failed to count contacts", Toast.LENGTH_SHORT).show();
                             });
-                }else{
+                } else {
                     Toast.makeText(AddContactActivity.this, "Enter all fields", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
     }
