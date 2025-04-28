@@ -45,7 +45,7 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-        binding.EditSOS.setOnClickListener(new View.OnClickListener() {
+        binding.editIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MenuActivity.this, EditSOSActivity.class);

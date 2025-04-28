@@ -17,25 +17,24 @@ import com.example.lifebeacon.databinding.ActivityEditSosactivityBinding;
 public class EditSOSActivity extends AppCompatActivity {
 
     private ActivityEditSosactivityBinding binding;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        binding = ActivityEditSosactivityBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         binding.saveSOS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String SOS = "Please Help! I am in trouble";
                 String editSOS = binding.editSOS.getText().toString();
-                if(!editSOS.isEmpty()){
-                    Intent intent = new Intent(EditSOSActivity.this, MainActivity.class);
+                Intent intent = new Intent(EditSOSActivity.this, MainActivity.class);
+
+                if (!editSOS.isEmpty()) {
                     intent.putExtra("SOS_Message", editSOS);
-                    startActivity(intent);
-                }else{
-                    Intent intent = new Intent(EditSOSActivity.this, MainActivity.class);
-                    intent.putExtra("default_Message", SOS);
-                    startActivity(intent);
                 }
+
+                startActivity(intent);
             }
         });
     }
