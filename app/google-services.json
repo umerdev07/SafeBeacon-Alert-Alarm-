@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "333673035275",
+    "project_id": "lifebeacon2025",
+    "storage_bucket": "lifebeacon2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:333673035275:android:1c2ac05207d8cd7e16f90e",
+        "android_client_info": {
+          "package_name": "com.example.lifebeacon"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBAntn82rN2iAMxgwdl7E_P4tlvO9VaAOA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
